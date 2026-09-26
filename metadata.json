@@ -1,0 +1,6 @@
+{
+  "name": "Climora - Climate Resilience Pitch Deck",
+  "description": "Satin Finserv Sankalp 2026 pitch deck for Climora: Bridging the Last-Mile Climate Adoption Gap with actionable smallholder resilience.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
