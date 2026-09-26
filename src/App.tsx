@@ -5,6 +5,7 @@ import { PresenterNav } from './components/PresenterNav';
 import { SlideCanvas } from './components/SlideCanvas';
 import { PresenterNotesDrawer } from './components/PresenterNotesDrawer';
 import { DeckGridModal } from './components/DeckGridModal';
+import { ProjectDeepDiveModal } from './components/ProjectDeepDiveModal';
 import { SLIDE_METADATA } from './data/slidesData';
 import { createClimoraPdfDocument, captureSlideElement, appendSlideToPdf } from './utils/pdfExport';
 
@@ -47,6 +48,7 @@ export default function App() {
   const [orderIndex, setOrderIndex] = useState(0); // Position in current narrative order
   const [isNotesOpen, setIsNotesOpen] = useState(false);
   const [isGridOpen, setIsGridOpen] = useState(false);
+  const [isDeepDiveOpen, setIsDeepDiveOpen] = useState(false);
 
   const activeOrder = narrativeMode === 'problem-first' ? PROBLEM_SOLUTION_FIRST_ORDER : SEQUENTIAL_ORDER;
   const currentActualSlideIndex = activeOrder[orderIndex];
@@ -101,9 +103,12 @@ export default function App() {
         setIsNotesOpen((prev) => !prev);
       } else if (e.key === 'g' || e.key === 'G') {
         setIsGridOpen((prev) => !prev);
+      } else if (e.key === 'd' || e.key === 'D') {
+        setIsDeepDiveOpen((prev) => !prev);
       } else if (e.key === 'Escape') {
         setIsGridOpen(false);
         setIsNotesOpen(false);
+        setIsDeepDiveOpen(false);
       }
     };
 
@@ -205,6 +210,7 @@ export default function App() {
         onToggleNotes={() => setIsNotesOpen(!isNotesOpen)}
         isNotesOpen={isNotesOpen}
         onOpenGridView={() => setIsGridOpen(true)}
+        onOpenDeepDive={() => setIsDeepDiveOpen(true)}
         onExportPdf={handleExportPdf}
         isPdfExporting={Boolean(pdfExportState?.isExporting)}
         pdfExportStatus={pdfExportState?.statusText === 'Downloaded PDF!' ? 'Downloaded PDF!' : null}
@@ -222,6 +228,19 @@ export default function App() {
             <CurrentSlideComponent />
           )}
         </SlideCanvas>
+
+        {/* Floating Project Dossier Pill (Bottom Left) */}
+        <div className="fixed bottom-4 left-4 z-30 no-print hidden md:block">
+          <button
+            onClick={() => setIsDeepDiveOpen(true)}
+            className="px-3.5 py-1.5 rounded-full bg-[#03150e]/90 hover:bg-[#062c1d] border border-emerald-500/40 text-emerald-300 text-xs font-semibold shadow-lg backdrop-blur-md flex items-center gap-2 transition-all hover:scale-105 cursor-pointer group"
+            title="Open comprehensive project explanation (D)"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <span>Project Deep Dive & Dossier</span>
+            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/30">D</span>
+          </button>
+        </div>
       </main>
 
       {/* Presenter Floating Notes Drawer */}
@@ -238,6 +257,13 @@ export default function App() {
         currentSlideIndex={currentActualSlideIndex}
         onSelectSlide={handleJumpToSlide}
         onExportPdf={handleExportPdf}
+      />
+
+      {/* Comprehensive Project Deep Dive Dossier Modal */}
+      <ProjectDeepDiveModal
+        isOpen={isDeepDiveOpen}
+        onClose={() => setIsDeepDiveOpen(false)}
+        onJumpToSlide={handleJumpToSlide}
       />
 
       {/* Print-Only Layout Rendering all 12 Slides */}

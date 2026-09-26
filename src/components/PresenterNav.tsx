@@ -14,7 +14,8 @@ import {
   RotateCcw,
   Download,
   Loader2,
-  CheckCircle2
+  CheckCircle2,
+  FileText
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { SLIDE_METADATA } from '../data/slidesData';
@@ -31,6 +32,7 @@ interface PresenterNavProps {
   onToggleNotes: () => void;
   isNotesOpen: boolean;
   onOpenGridView: () => void;
+  onOpenDeepDive?: () => void;
   onExportPdf?: () => void;
   isPdfExporting?: boolean;
   pdfExportStatus?: string | null;
@@ -47,6 +49,7 @@ export const PresenterNav: React.FC<PresenterNavProps> = ({
   onToggleNotes,
   isNotesOpen,
   onOpenGridView,
+  onOpenDeepDive,
   onExportPdf,
   isPdfExporting = false,
   pdfExportStatus = null
@@ -219,11 +222,24 @@ export const PresenterNav: React.FC<PresenterNavProps> = ({
           <button
             onClick={onOpenGridView}
             className="p-1.5 sm:px-2.5 sm:py-1 rounded-lg text-xs font-medium bg-[#03130d] text-emerald-200 border border-emerald-500/35 hover:bg-[#062419] flex items-center gap-1.5 transition-colors cursor-pointer"
-            title="View All Slides Grid"
+            title="View All Slides Grid (G)"
           >
             <LayoutGrid className="w-4 h-4" />
-            <span className="hidden md:inline">Deck Grid</span>
+            <span className="hidden md:inline">Grid</span>
           </button>
+
+          {/* Project Deep Dive Dossier Modal */}
+          {onOpenDeepDive && (
+            <button
+              onClick={onOpenDeepDive}
+              className="p-1.5 sm:px-2.5 sm:py-1 rounded-lg text-xs font-bold bg-[#041d13] text-emerald-300 border border-emerald-500/40 hover:bg-[#062b1c] hover:border-emerald-400/70 flex items-center gap-1.5 transition-all shadow-xs cursor-pointer group"
+              title="Open Detailed Project Dossier & Executive Breakdown (D)"
+            >
+              <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
+              <span className="hidden lg:inline">Project Deep Dive</span>
+              <span className="lg:hidden text-[10px] font-mono">Dossier</span>
+            </button>
+          )}
 
           {/* Download PPTX Button */}
           <button
